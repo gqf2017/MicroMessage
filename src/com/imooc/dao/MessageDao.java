@@ -28,7 +28,7 @@ public class MessageDao {
 			message.setDescription(description);
 			//1.通过SqlSession执行SQL语句
 			messageList=sqlSession.selectList("Message.queryMessageList",message);
-			//2.
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -38,6 +38,44 @@ public class MessageDao {
 			}
 		}
 		return messageList;
+	}
+	//根据id啥删除一条数据
+	public void deleteOne(int id){
+		DBAccess dbAccess=new DBAccess();
+		SqlSession sqlSession=null;
+		try {
+			sqlSession=dbAccess.getSqlSession();
+			//1.通过SqlSession执行SQL语句
+			sqlSession.delete("Message.deleteOne",id);
+			//需要提交事务
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			if(sqlSession!=null){
+				sqlSession.close();
+			}
+		}
+	}
+	//批量删除
+	public void deleteBatch(List<Integer> ids){
+		DBAccess dbAccess=new DBAccess();
+		SqlSession sqlSession=null;
+		try {
+			sqlSession=dbAccess.getSqlSession();
+			//通过SqlSession执行SQL语句
+			sqlSession.delete("Message.deleteBatch",ids);
+			//需要提交事务
+			sqlSession.commit();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			if(sqlSession!=null){
+				sqlSession.close();
+			}
+		}
 	}
 				
 	/**

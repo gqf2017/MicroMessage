@@ -20,32 +20,24 @@
     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="Message">
+<mapper namespace="Command">
 
-  <resultMap type="com.imooc.bean.Message" id="MessageResult">
+  <resultMap type="com.imooc.bean.Command" id="CommandResult">
     <id column="ID" jdbcType="INTEGER" property="id"/>
-    <result column="COMMAND" jdbcType="VARCHAR" property="command"/>
+    <result column="NAME" jdbcType="VARCHAR" property="name"/>
     <result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
-    <result column="CONTENT" jdbcType="VARCHAR" property="content"/>
+    <collection property="contentList" resultMap="CommandContent.Content"></collection>
   </resultMap>
 
-  <select id="queryMessageList" parameterType="com.imooc.bean.Message" resultMap="MessageResult">
-    select ID,COMMAND,DESCRIPTION,CONTENT from MESSAGE where 1=1
-    <if test="command!=null &amp;&amp; !&quot;&quot;.equals(command.trim())">
-     	and COMMAND=#{command}
+  <select id="queryCommandList" parameterType="com.imooc.bean.Command" resultMap="CommandResult">
+    select a.ID C_ID,a.NAME,a.DESCRIPTION,b.ID,b.CONTENT,b.COMMAND_ID
+    from COMMAND a left join COMMAND_CONTENT b ON (a.ID=b.COMMAND_ID)
+    where 1=1
+    <if test="name!=null &amp;&amp; !&quot;&quot;.equals(name.trim())">
+     	and a.NAME=#{name}
     </if>
      <if test="description!=null &amp;&amp; !&quot;&quot;.equals(description.trim())">
-     	and DESCRIPTION like '%' #{description} '%';
+     	and a.DESCRIPTION like '%' #{description} '%';
     </if>
-  </select>
-  <select id="deleteOne" parameterType="int">
-  	delete from MESSAGE where ID = #{_parameter}
-  </select>
-  <select id="deleteBatch" parameterType="java.util.List">
-  	delete from MESSAGE where ID in (
-  		<foreach collection="list" item="item" separator=",">
-  			#{item}
-  		</foreach>
-  	)
   </select>
 </mapper>

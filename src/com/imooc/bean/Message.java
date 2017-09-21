@@ -13,6 +13,12 @@ public class Message {
 	/**
 	 * 内容*/
 	private String content;
+	
+	
+
+	
+	
+	
 	public String getId() {
 		return id;
 	}

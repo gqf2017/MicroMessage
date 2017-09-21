@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.imooc.bean.Message;
-import com.imooc.service.MessageService;
+import com.imooc.service.QueryService;
 import com.mysql.jdbc.Connection;
 
 /**
@@ -34,7 +34,7 @@ public class ListServlet extends HttpServlet{
 		req.setAttribute("command", command);
 		req.setAttribute("description",description );
 		//查询消息列表并传给页面
-		MessageService messageService=new MessageService();
+		QueryService messageService=new QueryService();
 		req.setAttribute("messageList",messageService.queryMessageList(command, description));
 		//向页面跳转
 		req.getRequestDispatcher("/WEB-INF/jsp/back/list.jsp").forward(req, resp);
