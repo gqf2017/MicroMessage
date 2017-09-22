@@ -27,7 +27,8 @@ public class MessageDao {
 			message.setCommand(command);
 			message.setDescription(description);
 			//1.通过SqlSession执行SQL语句
-			messageList=sqlSession.selectList("Message.queryMessageList",message);
+			IMessage imessage=sqlSession.getMapper(IMessage.class);
+			messageList=imessage.queryMessageList(message);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
