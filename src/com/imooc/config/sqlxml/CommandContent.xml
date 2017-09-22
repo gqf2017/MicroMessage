@@ -22,7 +22,7 @@
 
 <mapper namespace="CommandContent">
 
-  <resultMap type="com.imooc.bean.CommandContent" id="CommandContentResult">
+  <resultMap type="com.imooc.bean.CommandContent" id="Content">
     <id column="ID" jdbcType="INTEGER" property="id"/>
     <result column="CONTENT" jdbcType="VARCHAR" property="content"/>
     <result column="COMMAND_ID" jdbcType="INTEGER" property="commandId"/>
