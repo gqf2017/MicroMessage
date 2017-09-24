@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 
@@ -16,7 +17,47 @@ import com.mysql.jdbc.Connection;
 /**
  * 和message表相关的数据库操作*/
 public class MessageDao {
-	//根据查询条件查询消息列表
+	//查询数据库的记录总条数
+	public int count(Message message){
+		DBAccess dbAccess=new DBAccess();
+		SqlSession sqlSession=null;
+		int num=0;
+		try {
+			sqlSession=dbAccess.getSqlSession();
+			IMessage imessage=sqlSession.getMapper(IMessage.class);
+			num=imessage.count(message);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			if(sqlSession!=null){
+				sqlSession.close();
+			}
+		}
+		return num;
+	}
+	//根据查询条件分页查询消息列表
+	public List<Message> queryMessageList(Map<String,Object> parameter){
+		DBAccess dbAccess=new DBAccess();
+		SqlSession sqlSession=null;
+		List<Message> messageList=new ArrayList<Message>();
+		try {
+			sqlSession=dbAccess.getSqlSession();
+			//1.通过SqlSession执行SQL语句
+			IMessage imessage=sqlSession.getMapper(IMessage.class);
+			messageList=imessage.queryMessageList(parameter);
+				
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			if(sqlSession!=null){
+				sqlSession.close();
+			}
+		}
+		return messageList;
+	}
+	/*//根据查询条件查询消息列表
 	public List<Message> queryMessageList(String command,String description){
 		DBAccess dbAccess=new DBAccess();
 		SqlSession sqlSession=null;
@@ -39,7 +80,7 @@ public class MessageDao {
 			}
 		}
 		return messageList;
-	}
+	}*/
 	//根据id啥删除一条数据
 	public void deleteOne(int id){
 		DBAccess dbAccess=new DBAccess();

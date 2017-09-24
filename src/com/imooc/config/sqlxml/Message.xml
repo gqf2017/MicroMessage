@@ -28,8 +28,31 @@
     <result column="DESCRIPTION" jdbcType="VARCHAR" property="description"/>
     <result column="CONTENT" jdbcType="VARCHAR" property="content"/>
   </resultMap>
-
-  <select id="queryMessageList" parameterType="com.imooc.bean.Message" resultMap="MessageResult">
+  <!-- 分页查询 -->
+ <select id="queryMessageList" parameterType="java.util.Map" resultMap="MessageResult">
+    select ID,COMMAND,DESCRIPTION,CONTENT from MESSAGE 
+    <where>
+	    <if test="command!=null and !&quot;&quot;.equals(message.command.trim())">
+	     	and COMMAND=#{message.command}
+	    </if>
+	     <if test="description!=null and !&quot;&quot;.equals(message.description.trim())">
+	     	and DESCRIPTION like '%' #{message.description} '%';
+	    </if>
+    </where>
+    order by ID limit #{page.dbIndex},#{page.dbNumber}
+  </select> 
+  <select id="count" parameterType="com.imooc.bean.Message" resultType="int">
+  	select count(*) from MESSAGE 
+  	<where>
+  		<if test="command != null and !&quot;&quot;.equals(command.trim())">
+  			and COMMAND=#{command}
+  		</if>
+  		<if test="description != null and !&quot;&quot;.equals(description.trim())">
+  			and DESCRIPTION like '%'#{description}'%'
+  		</if>
+  	</where>
+  </select>
+  <!-- <select id="queryMessageList" parameterType="com.imooc.bean.Message" resultMap="MessageResult">
     select ID,COMMAND,DESCRIPTION,CONTENT from MESSAGE where 1=1
     <if test="command!=null &amp;&amp; !&quot;&quot;.equals(command.trim())">
      	and COMMAND=#{command}
@@ -37,7 +60,7 @@
      <if test="description!=null &amp;&amp; !&quot;&quot;.equals(description.trim())">
      	and DESCRIPTION like '%' #{description} '%';
     </if>
-  </select>
+  </select> -->
   <select id="deleteOne" parameterType="int">
   	delete from MESSAGE where ID = #{_parameter}
   </select>
